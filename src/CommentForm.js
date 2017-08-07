@@ -3,7 +3,7 @@ import style from './style'
 
 class CommentForm extends Component {
 
-  {/* NOTE: initializes state */}
+  // NOTE: initializes state
   constructor(props){
     super(props)
     this.state = {
@@ -12,7 +12,6 @@ class CommentForm extends Component {
     }
   }
 
-  {/* NOTE: functions */}
   handleAuthorChange(event) {
     this.setState({
       author: event.target.value
