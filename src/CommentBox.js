@@ -12,6 +12,8 @@ class CommentBox extends Component {
     };
     this.loadCommentsFromServer = this.loadCommentsFromServer.bind(this);
     this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleCommentDelete = this.handleCommentDelete.bind(this);
+    this.handleCommentUpdate = this.handleCommentUpdate.bind(this);
   }
 
   loadCommentsFromServer() {
@@ -42,6 +44,31 @@ class CommentBox extends Component {
     });
   }
 
+  handleCommentDelete(id) {
+    $.ajax({
+      method: 'DELETE',
+      url: `${this.props.url}/${id}`
+    })
+    .then((res) => {
+      console.log('Comment deleted');
+    }, (err) => {
+      console.error(err);
+    })
+  }
+
+  handleCommentUpdate(id, comment) {
+    $.ajax({
+      method: 'PUT',
+      url: `${this.props.url}/${id}`,
+      data: comment
+    })
+    .then((res) => {
+      console.log('Comment updated!', res);
+    }, err => {
+      console.error(err);
+    })
+  }
+
   componentDidMount() {
     this.loadCommentsFromServer();
     setInterval(this.loadCommentsFromServer, this.props.pollInterval);
@@ -53,7 +80,10 @@ class CommentBox extends Component {
         <h2>Comments:</h2>
         <CommentForm
           onCommentSubmit={ this.handleCommentSubmit } />
-        <CommentList data={ this.state.data } />
+        <CommentList
+          onCommentDelete={ this.handleCommentDelete }
+          onCommentUpdate={ this.handleCommentUpdate }
+          data={ this.state.data } />
       </div>
     )
   }

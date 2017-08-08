@@ -10,6 +10,9 @@ class CommentForm extends Component {
       author: '',
       text: ''
     };
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleAuthorChange(e) {
@@ -38,23 +41,26 @@ class CommentForm extends Component {
   render(){
     return(
       <div>
-        <form style={style.commentForm} onSubmit={this.handleSubmit}>
+        <form style={ style.commentForm } onSubmit={ this.handleSubmit }>
           <input
             type='text'
             style={style.commentFormAuthor}
             placeholder='Name'
             value={this.state.author}
-            onChange={this.handleAuthorChange} />
+            onChange={this.handleAuthorChange}
+          />
           <input
             type='text'
             style={style.commentFormText}
             placeholder='Enter your comment'
             value={this.state.text}
-            onChange={this.handleTextChange} />
+            onChange={this.handleTextChange}
+          />
           <input
             type='submit'
             style={style.commentFormPost}
-            value='Post' />
+            value='Post'
+          />
         </form>
       </div>
     )

@@ -49,29 +49,55 @@ router.route('/nuke').get(function(req,res){
 
 //add /comments route to our /api router here
 router.route('/comments')
-  //retrieve all comments from the database
-  .get(function(req, res) {
-    //looks at our Comment Schema
-    Comment.find(function(err, comments) {
-      if (err)
-        res.send(err);
-      //responds with a json object of our database comments.
-      res.json(comments)
-    });
-  })
-  //post new comment to the database
-  .post(function(req, res) {
-    var comment = new Comment();
-    //body parser lets us use the req.body
-    comment.author = req.body.author;
-    comment.text = req.body.text;
+//retrieve all comments from the database
+.get(function(req, res) {
+  //looks at our Comment Schema
+  Comment.find(function(err, comments) {
+    if (err)
+      res.send(err);
+    //responds with a json object of our database comments.
+    res.json(comments)
+  });
+})
+//post new comment to the database
+.post(function(req, res) {
+  var comment = new Comment();
+  comment.author = req.body.author;
+  comment.text = req.body.text;
+
+  comment.save(function(err) {
+    if (err)
+      res.send(err);
+    res.json({ message: 'Comment successfully added!' });
+  });
+});
+
+router.route('/comments/:comment_id')
+//update comment based on the comment_id
+.put(function(req, res) {
+  Comment.findById(req.params.comment_id, function(err, comment) {
+    if(err)
+      res.send(err);
+    /* setting new author and text to whatever was changed;
+    if nothing was changed we will not alter the field.*/
+    (req.body.author) ? comment.author = req.body.author : null;
+    (req.body.text) ? comment.text = req.body.text : null;
 
     comment.save(function(err) {
       if (err)
         res.send(err);
-      res.json({ message: 'Comment successfully added!' });
-    });
-  });
+      res.json({ message: 'Comment has been updated!' });
+    })
+  })
+})
+//delete
+.delete(function(req, res) {
+  Comment.remove({ _id: req.params.comment_id }, function(err, comment) {
+    if (err)
+      res.send(err);
+    res.json({ message: 'Comment has been deleted!' });
+  })
+})
 
 //start server
 app.listen(port, function() {
