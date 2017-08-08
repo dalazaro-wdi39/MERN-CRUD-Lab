@@ -5,28 +5,34 @@ class CommentForm extends Component {
 
   // NOTE: initializes state
   constructor(props){
-    super(props)
+    super(props);
     this.state = {
       author: '',
       text: ''
+    };
+  }
+
+  handleAuthorChange(e) {
+    this.setState({
+      author: e.target.value
+    })
+  }
+
+  handleTextChange(e) {
+    this.setState({
+      text: e.target.value
+    })
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    let author = this.state.author.trim();
+    let text = this.state.text.trim();
+    if (!text || !author) {
+      return;
     }
-  }
-
-  handleAuthorChange(event) {
-    this.setState({
-      author: event.target.value
-    })
-  }
-
-  handleTextChange(event) {
-    this.setState({
-      text: event.target.value
-    })
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log(`${this.state.author} said: "${this.state.text}"`);
+    this.props.onCommentSubmit({ author: author, text: text });
+    this.setState({ author: '', text: '' });
   }
 
   render(){
@@ -45,11 +51,10 @@ class CommentForm extends Component {
             placeholder='Enter your comment'
             value={this.state.text}
             onChange={this.handleTextChange} />
-          <button
+          <input
             type='submit'
-            style={style.commentFormPost}>
-              Submit
-          </button>
+            style={style.commentFormPost}
+            value='Post' />
         </form>
       </div>
     )
